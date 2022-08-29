@@ -18,6 +18,11 @@ class MainVC: UIViewController {
     @IBOutlet private weak var searchBar : UIView!{
         didSet{
             searchBar.layer.cornerRadius = 15.0
+            searchBar.layer.shadowColor = UIColor(r: 191, g: 197, b: 245, alph: 0.15).cgColor
+            searchBar.layer.shadowRadius = 8
+            searchBar.layer.shadowOpacity = 1
+            searchBar.layer.shadowOffset = CGSize(width: 0, height: 0)
+            
         }
     }
     @IBOutlet private weak var qrView : UIView!{
@@ -48,7 +53,7 @@ class MainVC: UIViewController {
     }
 
     
-    let networkService = NetworkService()
+    let networkService = HomeViewModel()
     let categories = Categories().categories
     var oldIndexPath : IndexPath?
     override func viewDidLoad() {
@@ -69,10 +74,11 @@ class MainVC: UIViewController {
         HotSalesCollectionView.dataSource = self
         BestsellerCollectionView.delegate = self
         BestsellerCollectionView.dataSource = self
+        BestsellerCollectionView.layer.cornerRadius = 20.0
     }
     
     func loadContent(){
-        networkService.loadSlider(content: .mainScreenInfo) { response in
+        networkService.loadHotSales(content: .mainScreenInfo) { response in
             self.content = response
         }
     }
@@ -151,6 +157,7 @@ extension MainVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColle
             return cell ?? .init()
     }
 }
+
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -163,11 +170,19 @@ extension MainVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColle
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell
-        if let oldIndexPath = self.oldIndexPath{
-            categoriesCollectionView.deselectItem(at: oldIndexPath, animated: false)
+        if collectionView == BestsellerCollectionView{
+            let detailsVC = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "\(ProductDetailsVC.self)")
+            print("tapped")
+            present(detailsVC, animated: true)
+        }else if collectionView == categoriesCollectionView{
+            let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell
+            if let oldIndexPath = self.oldIndexPath{
+                categoriesCollectionView.deselectItem(at: oldIndexPath, animated: false)
+            }
+            self.oldIndexPath = indexPath
         }
-        self.oldIndexPath = indexPath
+        
     }
 
     

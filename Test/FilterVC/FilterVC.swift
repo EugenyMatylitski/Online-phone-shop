@@ -14,6 +14,7 @@ final class FilterVC : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        setupBackgroundView()
     }
     
     func setupViews (){
@@ -21,7 +22,12 @@ final class FilterVC : UIViewController{
         doneButton.layer.cornerRadius = 10.0
         doneButton.addTarget(self, action: #selector(doneButtonTap), for: .touchUpInside)
     }
-    
+    func setupBackgroundView(){
+        backgroundView.layer.shadowColor = UIColor(r: 76, g: 95, b: 143, alph: 0.2).cgColor
+        backgroundView.layer.shadowRadius = 5
+        backgroundView.layer.shadowOpacity = 1
+        backgroundView.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
     @objc func doneButtonTap(){
         dismiss(animated: true)
     }

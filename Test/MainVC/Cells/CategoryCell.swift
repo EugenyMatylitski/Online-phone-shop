@@ -33,7 +33,14 @@ final class CategoryCell : UICollectionViewCell{
             categoryImage.image = UIImage(named: category?.imageName ?? "")
             categoryImage.tintColor = .testGrey
             categoryName.text = category?.name ?? ""
+            setupShadow()
         }
+    }
+    func setupShadow (){
+        circle.layer.shadowColor =  UIColor(r: 167, g: 171, b: 201, alph: 0.15).cgColor
+        circle.layer.shadowRadius = 5
+        circle.layer.shadowOpacity = 1
+        circle.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
     
